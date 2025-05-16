@@ -10,7 +10,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("pavithradocker94/abstergo-website:${env.BUILD_NUMBER}")
+                    docker.build("yourdockerhubusername/abstergo-website:${env.BUILD_NUMBER}")
                 }
             }
         }
@@ -19,21 +19,16 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     script {
                         docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                            docker.image("pavithradocker94/abstergo-website:${env.BUILD_NUMBER}").push()
+                            docker.image("yourdockerhubusername/abstergo-website:${env.BUILD_NUMBER}").push()
                         }
                     }
                 }
             }
         }
         stage('Deploy to Kubernetes') {
-    steps {
-        script {
-            if (isUnix()) {
-                sh 'kubectl apply -f deployment.yaml'
-            } else {
-                bat 'kubectl apply -f deployment.yaml'
+            steps {
+                bat 'kubectl set image deployment/abstergo-deployment abstergo-container=yourdockerhubusername/abstergo-website:${env.BUILD_NUMBER} --record'
             }
         }
     }
 }
-
