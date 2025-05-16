@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Deploy to Kubernetes') {
             steps {
-                bat 'kubectl set image deployment/abstergo-deployment abstergo-container=yourdockerhubusername/abstergo-website:${env.BUILD_NUMBER} --record'
+                bat 'kubectl set image deployment/abstergo-deployment abstergo-container=pavithradocker94/abstergo-website:${env.BUILD_NUMBER} --record'
             }
         }
     }
