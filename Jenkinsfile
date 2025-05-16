@@ -10,7 +10,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("yourdockerhubusername/abstergo-website:${env.BUILD_NUMBER}")
+                    docker.build("pavithradocker94/abstergo-website:${env.BUILD_NUMBER}")
                 }
             }
         }
@@ -19,7 +19,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     script {
                         docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                            docker.image("yourdockerhubusername/abstergo-website:${env.BUILD_NUMBER}").push()
+                            docker.image("pavithradocker94/abstergo-website:${env.BUILD_NUMBER}").push()
                         }
                     }
                 }
