@@ -27,7 +27,8 @@ pipeline {
         }
         stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: 'kubeconfig-docker-desktop', variable: 'KUBECONFIG')]) {
+                withCredentials([file(credentialsId: 'kubeconfig-docker-desktop', variable: 'KUBECONFIG')])
+                {
             bat '''
                 kubectl config get-contexts  # Optional: for debugging
                 kubectl set image deployment/abstergo-deployment abstergo-container=pavithradocker94/abstergo-website:${BUILD_NUMBER}
@@ -35,4 +36,3 @@ pipeline {
             }
         }
     }
-}
