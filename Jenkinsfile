@@ -31,6 +31,20 @@ pipeline {
                 }
             }
         }
+        stage('Debug Kubectl') {
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig-docker-desktop', variable: 'KUBECONFIG')]) {
+      bat """
+        echo Kubeconfig file path: %KUBECONFIG%
+        kubectl config view
+        kubectl config current-context
+        kubectl config get-contexts
+        kubectl get namespaces
+        kubectl get deployments --all-namespaces
+      """
+    }
+  }
+}
 
         stage('Deploy to Kubernetes') {
   steps {
