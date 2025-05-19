@@ -33,17 +33,17 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
-    steps {
-        withCredentials([file(credentialsId: 'kubeconfig-docker-desktop', variable: 'KUBECONFIG')]) {
-            script {
-                bat """
-                    echo Using kubeconfig from %KUBECONFIG%
-                    kubectl config get-contexts
-                    kubectl get deployments
-                    kubectl set image deployment/abstergo-deployment abstergo-container="${IMAGE_NAME}"
-                    kubectl rollout status deployment/abstergo-deployment
-                    kubectl get pods -l app=abstergo
-                """
+  steps {
+    withCredentials([file(credentialsId: 'kubeconfig-docker-desktop', variable: 'KUBECONFIG')]) {
+      script {
+        bat """
+          echo Using kubeconfig from %KUBECONFIG%
+          kubectl config get-contexts
+          kubectl get deployments -n default
+          kubectl set image deployment/abstergo-deployment abstergo-container=${IMAGE_NAME} -n default
+          kubectl rollout status deployment/abstergo-deployment -n default
+          kubectl get pods -l app=abstergo -n default
+        """
                     }
                 }
             }
